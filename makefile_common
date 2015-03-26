@@ -1,0 +1,111 @@
+CC = cc
+CXX = CC
+
+CPP = yes
+THREADS=yes
+SHAREABLE=
+32BITS=no
+
+IDIR = ./dim
+
+EXTRALIBS = 
+FLAGS = 
+
+CFLAGS = $(FLAGS) -g -I$(IDIR)
+EXCFLAGS = $(FLAGS) -g -I$(IDIR) 
+LIBFLAGS =
+X64 = no
+
+ifeq ($(BITS32),yes)
+	32BITS = yes
+endif
+
+ifeq ($(32BITS),yes)
+	CFLAGS += -m32
+	LIBFLAGS += -m32
+	EXCFLAGS += -m32
+	X64 = no
+else
+	X64 = yes
+endif
+
+ifeq ($(OS),SunOS)
+	CFLAGS += -DMIPSEB -DPROTOCOL=1 -Dsunos
+endif
+ifeq ($(OS),Solaris)
+ifeq ($(THREADS),yes)
+	CFLAGS += -mt
+	EXCFLAGS += -mt
+	EXTRALIBS += -lposix4
+endif
+	SHAREABLE = no
+	LIBFLAGS += -G 
+	EXTRALIBS += -lsocket -lnsl
+	CFLAGS += -DMIPSEB -DPROTOCOL=1 -Dsolaris 
+	RANLIB = echo
+endif
+ifeq ($(OS),HP-UX)
+	THREADS = no
+	SHAREABLE = no
+	CFLAGS += -DMIPSEB -DPROTOCOL=1 -Dhpux
+endif
+ifeq ($(OS),OSF1)
+	THREADS = no
+	SHAREABLE = no
+	CFLAGS += -DMIPSEL -DPROTOCOL=1 -Dosf
+endif
+ifeq ($(OS),AIX)
+	THREADS = no
+	SHAREABLE = no
+	CFLAGS += -DMIPSEB -DPROTOCOL=1 -Dunix -D_BSD -Daix
+endif
+ifeq ($(OS),LynxOS)
+	SHAREABLE = no
+ifeq ($(ARCH),RAID)
+	CFLAGS += -I/usr/include/bsd -I/usr/include/posix -DMIPSEB -DPROTOCOL=1 -Dunix -DLYNXOS -DRAID
+	EXTRALIBS += -L/usr/posix/usr/lib -lbsd
+else
+ifeq ($(ARCH),INTEL)
+	CC = gcc
+	CXX = g++
+	CFLAGS += -DMIPSEL -DPROTOCOL=1 -Dunix -DLYNXOS -mthreads
+	EXCFLAGS += -mthreads
+	EXTRALIBS += -lbsd
+else
+	CC = gcc
+	CXX = g++
+# May need to add -U__Lynx__ flag for LynxOS 2.5.1 (M68040)
+	CFLAGS += -DMIPSEB -DPROTOCOL=1 -Dunix -DLYNXOS -mthreads
+	EXCFLAGS += -mthreads
+	EXTRALIBS += -lbsd
+endif
+endif
+endif
+ifeq ($(OS),Linux)
+	CC = gcc
+	CXX = g++
+ifeq ($(ARCH),PPC)
+	CFLAGS +=  -Wall -DMIPSEB -DPROTOCOL=1 -Dunix -Dlinux -fPIC
+else
+	CFLAGS +=  -Wall -Wextra -DMIPSEL -DPROTOCOL=1 -Dunix -Dlinux -fPIC
+	EXCFLAGS +=  -Wall -Wextra
+endif
+ifneq ($(SHAREABLE),no)
+	SHAREABLE = yes
+	LIBFLAGS += -shared
+endif
+endif
+ifeq ($(OS),Darwin)
+	CC = gcc
+	CXX = g++
+	SHAREABLE = no
+	CFLAGS += -DMIPSEL -DPROTOCOL=1 -Dunix -Dlinux -Ddarwin -fPIC
+endif
+
+ifneq ($(THREADS),yes)
+	CFLAGS += -DNOTHREADS
+else
+ifneq ($(OS), LynxOS)
+	EXTRALIBS += -lpthread
+endif
+endif

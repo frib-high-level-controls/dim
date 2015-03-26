@@ -1,0 +1,88 @@
+
+#
+# did makefile
+#
+
+include makefile_common
+
+SDIR = ./src/did
+
+CFLAGS += -I$(SDIR) -I$(MOTIFINC) -I$(X11INC) $(EXTRAMOTIFFLAGS)
+LFLAGS = -L$(MOTIFLIB) -L$(X11LIB)
+
+EXTRAMOTIFFLAGS =
+LIBS = $(EXTRALIBS)
+MORE_FLAGS = $(EXTRALIBS) -lMrm
+
+ifeq ($(OS),SunOS)
+	MOTIFINC = /usr/motif/include
+	MOTIFLIB = /usr/motif/lib
+	X11INC = /usr/X11R5/include/X11
+	X11LIB = /usr/X11R5/lib
+	UILC = /usr/motif/bin/uil
+endif
+ifeq ($(OS),Solaris)
+	MOTIFINC = /usr/dt/include
+	MOTIFLIB = /usr/dt/lib
+	X11INC = /usr/openwin/include
+	X11LIB = /usr/openwin/lib
+	MORE_FLAGS += -lposix4
+#	MORE_FLAGS += -R$(MOTIFLIB):$(X11LIB) -lMrm
+#	UILC = /usr/local/motif/bin/uil
+#	UILC = /usr/dt/bin/uil
+endif
+ifeq ($(OS),HP-UX)
+	MOTIFINC = /usr/include/Motif1.2
+	MOTIFLIB = /usr/lib/Motif1.2
+	X11INC = /usr/include/X11R5
+	X11LIB = /usr/lib/X11R5
+	MORE_FLAGS += -l:libMrm.a
+endif
+ifeq ($(OS),OSF1)
+	MOTIFINC = .
+	MOTIFLIB = .
+	X11INC = .
+	X11LIB = .
+endif
+ifeq ($(OS),AIX)
+	MOTIFINC = /usr/include/Motif1.2
+	MOTIFLIB = /usr/lib/Motif1.2
+	X11INC = /usr/include/X11R5
+	X11LIB = /usr/lib/X11R5
+endif
+ifeq ($(OS),Linux)
+	MOTIFINC = /usr/local/include
+	MOTIFLIB = /usr/local/lib
+	X11INC = /usr/X11R6/include
+ifeq ($(X64),yes)
+	X11LIB = /usr/X11R6/lib64
+else
+	X11LIB = /usr/X11R6/lib
+endif
+	MORE_FLAGS += -lpthread
+endif
+ifeq ($(OS),Darwin)
+	MOTIFINC = /usr/OpenMotif/include
+	MOTIFLIB = /usr/OpenMotif/lib
+	X11INC = /usr/X11R6/include
+	X11LIB = /usr/X11R6/lib
+endif
+
+all:	$(ODIR)/did
+
+$(ODIR)/dui_util.o:	$(SDIR)/dui_util.c $(SDIR)/dui_util.h
+	$(CC) $(CFLAGS) -o $(ODIR)/dui_util.o -c $(SDIR)/dui_util.c
+
+$(ODIR)/did.o:	$(SDIR)/did.c $(SDIR)/did.h
+	$(CC) $(CFLAGS) -o $(ODIR)/did.o -c $(SDIR)/did.c
+
+$(ODIR)/did: $(ODIR)/did.o $(ODIR)/dui_util.o $(ODIR)/libdim.a
+	$(CC) $(CFLAGS) $(ODIR)/did.o $(ODIR)/dui_util.o -L$(DIMDIR)/$(ODIR) -ldim $(LFLAGS) $(MORE_FLAGS) -lXm -lXt -lX11 -o $(ODIR)/did
+
+
+
+
+
+
+
+

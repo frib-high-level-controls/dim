@@ -1,0 +1,101 @@
+
+set POSSOSVALUES = HP-UX,AIX,OSF1,SunOS,Solaris,LynxOS,Linux,Darwin,
+if ($?OS) then
+    echo OS is set to $OS
+    set TEMP = $OS,
+    echo $POSSOSVALUES | grep $TEMP>/dev/null
+    if ( ! $status == 0) then
+        echo Unknown OS... setup failed
+        echo Possible values are: $POSSOSVALUES
+        exit 1
+    endif
+else
+   echo Variable OS must be defined... setup failed
+   echo Possible values are: $POSSOSVALUES
+   exit 1
+endif
+
+if ( ${OS} == Solaris ) then
+    set path = (/usr/ccs/bin $path)
+endif
+
+if ($?DIMDIR) then
+	echo DIMDIR is set to $DIMDIR
+else
+	setenv DIMDIR `pwd`
+	echo DIMDIR is set to $DIMDIR
+endif
+
+if ($?ODIR) then
+    echo ODIR is set to $ODIR
+    goto finish
+endif
+
+switch ($OS)
+	case HP-UX:
+		setenv ODIR hp
+		breaksw
+	case AIX:
+		setenv ODIR aix
+		breaksw
+	case OSF1:
+		setenv ODIR osf
+		breaksw
+	case SunOS:
+		setenv ODIR sunos
+		breaksw
+	case Solaris
+		setenv ODIR solaris
+		breaksw
+	case LynxOS:
+		setenv ODIR lynxos
+		breaksw
+	case Linux:
+		setenv machine `uname -m`
+		if ( $machine != x86_64 ) then
+			setenv BITS32 yes
+			echo "default is 32 bits"
+		else
+			echo "default is 64 bits"
+		endif
+		setenv ODIR linux
+		breaksw
+	case Darwin:
+		setenv ODIR darwin
+		breaksw
+	default:
+        	echo Unknown OS... setup failed
+                exit 1
+endsw
+
+echo ODIR is set to $ODIR
+
+finish:
+if ( ${OS} == Linux ) then
+if (! $?LD_LIBRARY_PATH) then
+    setenv LD_LIBRARY_PATH $DIMDIR/$ODIR
+else
+    setenv LD_LIBRARY_PATH $DIMDIR/$ODIR\:$LD_LIBRARY_PATH
+endif
+set path = ($DIMDIR/$ODIR $path)
+rehash
+endif
+
+alias TestServer $DIMDIR/$ODIR/testServer
+alias TestClient $DIMDIR/$ODIR/testClient
+alias Test_server $DIMDIR/$ODIR/test_server
+alias Test_client $DIMDIR/$ODIR/test_client
+alias Dns    $DIMDIR/$ODIR/dns
+alias Dim_get_service $DIMDIR/$ODIR/dim_get_service
+alias Dim_send_command $DIMDIR/$ODIR/dim_send_command
+alias DimBridge    $DIMDIR/$ODIR/DimBridge
+alias Did    $DIMDIR/$ODIR/did
+
+if (! -d $DIMDIR/$ODIR) then
+   mkdir $DIMDIR/$ODIR
+   echo Created Directory: $DIMDIR/$ODIR 
+endif
+exit
+
+
+

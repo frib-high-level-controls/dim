@@ -1,0 +1,110 @@
+struct (
+	"BuildDir" : "jdim/sources/dim/test",
+	"BuildSupport" : false,
+	"BuildSupportPlatforms" : "All",
+	"CreateLinks" : true,
+	"DisplayName" : "test",
+	"FileCount" : 3,
+	"FileSet" : array (
+		struct (
+			"FileName" : "jdim/sources/dim/test/TestClient.java",
+			"FileType" : "Java"
+		),
+		struct (
+			"FileName" : "jdim/sources/dim/test/TestServer.java",
+			"FileType" : "Java"
+		),
+		struct (
+			"FileName" : "jdim/sources/dim/test/test.proj",
+			"FileType" : "Project"
+		)
+	),
+	"FileTypes" : struct (
+		"ASCII-Documentation" : struct (
+			"BuildTool" : "",
+			"Language" : "",
+			"Signatures" : "*.txt:README*:readme*:Readme*:ReadMe*",
+			"SubType" : "ASCII",
+			"Type" : "Documentation"
+		),
+		"C Implementation" : struct (
+			"BuildTool" : "C Compiler",
+			"Language" : "ANSI C/C++",
+			"Signatures" : "*.c",
+			"SubType" : "C-Type",
+			"Type" : "Implementation"
+		),
+		"C++ Implementation" : struct (
+			"BuildTool" : "C++ Compiler",
+			"Language" : "ANSI C/C++",
+			"Signatures" : "*.C:*.cc:*.CC:*.cpp:*.CPP:*.cxx:*.CXX",
+			"SubType" : "C++-Type",
+			"Type" : "Implementation"
+		),
+		"Debug Output" : struct (
+			"BuildTool" : "",
+			"Language" : "",
+			"Signatures" : "*.log:*.pfidbg:*.dbg",
+			"SubType" : "Debug Output",
+			"Type" : "Other"
+		),
+		"Header" : struct (
+			"BuildTool" : "",
+			"Language" : "ANSI C/C++",
+			"Signatures" : "*.h:*.H:*.hh:*.HH:*.hpp:*.HPP:*.hxx:*.HXX:*.ci",
+			"SubType" : "Interface",
+			"Type" : "Interface"
+		),
+		"Java" : struct (
+			"BuildTool" : "SniffJMake",
+			"Language" : "Java",
+			"Signatures" : "*.java",
+			"SubType" : "Java-Type",
+			"Type" : "Implementation"
+		),
+		"Makefile" : struct (
+			"BuildTool" : "",
+			"Language" : "Make",
+			"Signatures" : "Makefile:[Mm]akefile*:MAKEFILE*:GNU[Mm]akefile*:*.mk:*.mak:*.MAK:*.mf:*.mh:*_makefile",
+			"SubType" : "Non-Sniff-Make",
+			"Type" : "Make"
+		),
+		"Project" : struct (
+			"BuildTool" : "",
+			"Language" : "",
+			"Signatures" : "*.proj:*.shared",
+			"SubType" : "Project",
+			"Type" : "Project"
+		),
+		"ShellScript" : struct (
+			"BuildTool" : "",
+			"Language" : "ShellScript",
+			"Signatures" : "*.sh:*.csh",
+			"SubType" : "ShellScript-Type",
+			"Type" : "Script"
+		)
+	),
+	"FileTypesOrder" : array (
+		"Project",
+		"Header",
+		"Debug Output",
+		"Makefile",
+		"Java",
+		"ASCII-Documentation",
+		"ShellScript",
+		"C++ Implementation",
+		"C Implementation"
+	),
+	"GenerateDir" : "jdim/sources/dim/test/.sniffdir",
+	"Release" : "V4.0",
+	"Targets" : struct (
+		"Objects" : struct (
+			"BuildTool" : "None",
+			"PassedToSuperproject" : true
+		),
+		"Received" : struct (
+			"BuildTool" : "None",
+			"PassedToSuperproject" : true
+		)
+	)
+)

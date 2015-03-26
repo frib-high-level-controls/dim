@@ -1,0 +1,106 @@
+#
+# dim makefile
+#
+
+include makefile_common
+
+JDIM = no
+
+ARCH = 
+SDIR = ./src
+
+ifeq ($(CPP),yes)
+OBJS = $(ODIR)/diccpp.o $(ODIR)/discpp.o $(ODIR)/dimcpp.o $(ODIR)/tokenstring.o $(ODIR)/dic.o $(ODIR)/dis.o $(ODIR)/dna.o
+else
+OBJS = $(ODIR)/dic.o $(ODIR)/dis.o $(ODIR)/dna.o
+endif
+
+UTILOBJS = $(ODIR)/sll.o $(ODIR)/dll.o $(ODIR)/hash.o $(ODIR)/swap.o $(ODIR)/copy_swap.o $(ODIR)/open_dns.o $(ODIR)/conn_handler.o
+
+UNIXOBJS = $(ODIR)/tcpip.o $(ODIR)/dtq.o $(ODIR)/dim_thr.o $(ODIR)/utilities.o
+
+JOBJS =  $(ODIR)/dim_jni.o
+
+RANLIB = ranlib
+
+ifeq ($(SHAREABLE),no)
+all:	$(ODIR)/libdim.a $(ODIR)/dns
+else
+ifeq ($(JDIM),yes)
+ifdef JDK_INCLUDE
+all:	$(ODIR)/libdim.a $(ODIR)/libdim.so $(ODIR)/libjdim.so $(ODIR)/dns
+else
+all:
+	echo "Please define JDK_INCLUDE";
+endif
+else
+all:	$(ODIR)/libdim.a $(ODIR)/libdim.so $(ODIR)/dns
+endif
+endif
+
+$(ODIR)/libdim.a:	$(OBJS) $(UTILOBJS) $(UNIXOBJS)
+	ar crv $(ODIR)/libdim.a $(OBJS) $(UTILOBJS) $(UNIXOBJS)
+	$(RANLIB) $(ODIR)/libdim.a
+
+$(ODIR)/libdim.so:	$(OBJS) $(UTILOBJS) $(UNIXOBJS)
+	$(CXX) $(LIBFLAGS) $(OBJS) $(UTILOBJS) $(UNIXOBJS) -o $(ODIR)/libdim.so
+
+$(ODIR)/libjdim.so:	$(OBJS) $(UTILOBJS) $(UNIXOBJS) $(JOBJS)
+	$(CXX) $(LIBFLAGS) $(OBJS) $(UTILOBJS) $(UNIXOBJS) $(JOBJS) -lgcc -o $(ODIR)/libjdim.so
+
+$(ODIR)/dns:	$(ODIR)/dns.o $(ODIR)/libdim.a
+	$(CC) $(CFLAGS) -L$(ODIR) $(ODIR)/dns.o -ldim -o $(ODIR)/dns $(EXTRALIBS)
+
+clean:
+	/bin/rm -f $(OBJS) $(UTILOBJS) $(UNIXOBJS) $(ODIR)/dns.o core *~
+	cd $(SDIR); /bin/rm -f core *~
+
+realclean:	clean
+		/bin/rm -f $(ODIR)/libdim.a $(ODIR)/dns
+
+$(ODIR)/dns.o:		$(SDIR)/dns.c $(IDIR)/dim.h
+	$(CC) $(CFLAGS) -o $(ODIR)/dns.o -c $(SDIR)/dns.c
+$(ODIR)/dis.o:		$(SDIR)/dis.c $(IDIR)/dim.h $(IDIR)/dis.h
+	$(CC) $(CFLAGS) -o $(ODIR)/dis.o -c $(SDIR)/dis.c
+$(ODIR)/dic.o:		$(SDIR)/dic.c $(IDIR)/dim.h $(IDIR)/dic.h
+	$(CC) $(CFLAGS) -o $(ODIR)/dic.o -c $(SDIR)/dic.c
+$(ODIR)/dna.o:		$(SDIR)/dna.c $(IDIR)/dim.h
+	$(CC) $(CFLAGS) -o $(ODIR)/dna.o -c $(SDIR)/dna.c
+$(ODIR)/diccpp.o:	$(SDIR)/diccpp.cxx
+	$(CXX) $(CFLAGS) -o $(ODIR)/diccpp.o -c $(SDIR)/diccpp.cxx
+$(ODIR)/discpp.o:	$(SDIR)/discpp.cxx
+	$(CXX) $(CFLAGS) -o $(ODIR)/discpp.o -c $(SDIR)/discpp.cxx
+$(ODIR)/dimcpp.o:	$(SDIR)/dimcpp.cxx
+	$(CXX) $(CFLAGS) -o $(ODIR)/dimcpp.o -c $(SDIR)/dimcpp.cxx
+$(ODIR)/tokenstring.o:	$(SDIR)/tokenstring.cxx
+	$(CXX) $(CFLAGS) -o $(ODIR)/tokenstring.o -c $(SDIR)/tokenstring.cxx
+
+
+$(ODIR)/sll.o:		$(SDIR)/sll.c $(IDIR)/dim.h
+	$(CC) $(CFLAGS) -o $(ODIR)/sll.o -c $(SDIR)/sll.c
+$(ODIR)/dll.o:		$(SDIR)/dll.c $(IDIR)/dim.h
+	$(CC) $(CFLAGS) -o $(ODIR)/dll.o -c $(SDIR)/dll.c
+$(ODIR)/hash.o:		$(SDIR)/hash.c $(IDIR)/dim.h
+	$(CC) $(CFLAGS) -o $(ODIR)/hash.o -c $(SDIR)/hash.c
+$(ODIR)/swap.o:		$(SDIR)/swap.c $(IDIR)/dim.h
+	$(CC) $(CFLAGS) -o $(ODIR)/swap.o -c $(SDIR)/swap.c
+$(ODIR)/copy_swap.o:	$(SDIR)/copy_swap.c $(IDIR)/dim.h
+	$(CC) $(CFLAGS) -o $(ODIR)/copy_swap.o -c $(SDIR)/copy_swap.c
+$(ODIR)/open_dns.o:	$(SDIR)/open_dns.c $(IDIR)/dim.h
+	$(CC) $(CFLAGS) -o $(ODIR)/open_dns.o -c $(SDIR)/open_dns.c
+$(ODIR)/conn_handler.o:	$(SDIR)/conn_handler.c $(IDIR)/dim.h
+	$(CC) $(CFLAGS) -o $(ODIR)/conn_handler.o -c $(SDIR)/conn_handler.c
+$(ODIR)/dim_jni.o:	$(SDIR)/dim_jni.c $(IDIR)/dim_jni.h
+	$(CC) $(CFLAGS) -I $(JDK_INCLUDE) -I $(JDK_INCLUDE)/$(ODIR) -o $(ODIR)/dim_jni.o -c $(SDIR)/dim_jni.c
+
+
+$(ODIR)/tcpip.o:	$(SDIR)/tcpip.c $(IDIR)/dim.h
+	$(CC) $(CFLAGS) -o $(ODIR)/tcpip.o -c $(SDIR)/tcpip.c
+$(ODIR)/dtq.o:		$(SDIR)/dtq.c $(IDIR)/dim.h
+	$(CC) $(CFLAGS) -o $(ODIR)/dtq.o -c $(SDIR)/dtq.c
+$(ODIR)/dim_thr.o:	$(SDIR)/dim_thr.c $(IDIR)/dim.h
+	$(CC) $(CFLAGS) -o $(ODIR)/dim_thr.o -c $(SDIR)/dim_thr.c
+$(ODIR)/utilities.o:	$(SDIR)/utilities.c $(IDIR)/dim.h
+	$(CC) $(CFLAGS) -o $(ODIR)/utilities.o -c $(SDIR)/utilities.c
+
+

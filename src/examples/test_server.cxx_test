@@ -1,0 +1,59 @@
+//============================================================================
+// Name        : emptyDimFormat.cpp
+// Author      : Etienne Lyard etienne.lyard@unige.ch
+// Version     : 00
+// Copyright   :
+// Description : Demonstrates the occurence of an empty Dim format from the client's perspective
+//============================================================================
+
+#include <dic.hxx>
+#include <dis.hxx>
+#include <iostream>
+using namespace std;
+
+class EmptyServiceSubscriber : public DimClient
+{
+    DimStampedInfo* info;
+public:
+    EmptyServiceSubscriber()
+    {
+        info = new DimStampedInfo("TIME/EMPTY", const_cast<char*>(""), this);
+   }
+    void infoHandler()
+    {
+        DimInfo* I = getInfo();
+        if (I == info)
+		{
+			if((*(char *)(I->getData())) != '\0')
+			{
+				cout << "EMPTY SERVICE UPDATED. " << "Format: " << I->getFormat() << endl;
+			}
+			else
+			{
+				cout << "EMPTY SERVICE NOT THERE. " << endl;
+			}
+		}
+    }
+};
+
+int main(int, const char**)
+{
+    DimServer::start("TIME");
+
+    long emptyFormatVariable = 0;
+    DimService* emptyFormatService = new DimService("TIME/EMPTY", "X:1", &emptyFormatVariable, sizeof(long));
+    EmptyServiceSubscriber mySubscriber;
+    //The three lines below create (most of the time) an empty format on the client side.
+    //We must be able to deal with such cases in our framework because services can be stopped and re-spawned at any time
+    delete emptyFormatService;
+    usleep(1000000);
+    emptyFormatService = new DimService("TIME/EMPTY", "X:1", &emptyFormatVariable, sizeof(long));
+
+    while (1)
+    {
+        emptyFormatService->updateService();
+        usleep(100000);
+    }
+
+	return 0;
+}

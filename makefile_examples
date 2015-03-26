@@ -1,0 +1,43 @@
+#
+# test makefile
+#
+
+include makefile_common
+
+SDIR = ./src/examples
+
+LIBS = $(EXTRALIBS)
+
+ifeq ($(CPP),yes)
+all:	$(ODIR)/test_server $(ODIR)/test_client $(ODIR)/testServer $(ODIR)/testClient
+else
+all:	$(ODIR)/test_server $(ODIR)/test_client
+endif
+
+$(ODIR)/test_server:	$(SDIR)/test_server.c $(DIMDIR)/$(ODIR)/libdim.a
+	$(CC) $(EXCFLAGS) $(LDFLAGS) $(SDIR)/test_server.c -L$(DIMDIR)/$(ODIR) -ldim -o $(ODIR)/test_server $(LIBS)
+	
+$(ODIR)/test_client:	$(SDIR)/test_client.c $(DIMDIR)/$(ODIR)/libdim.a
+	$(CC) $(EXCFLAGS) $(LDFLAGS) $(SDIR)/test_client.c -L$(DIMDIR)/$(ODIR) -ldim -o $(ODIR)/test_client $(LIBS)
+	
+$(ODIR)/testServer:	$(SDIR)/test_server.cxx $(DIMDIR)/$(ODIR)/libdim.a
+	$(CXX) $(EXCFLAGS) $(LDFLAGS) $(SDIR)/test_server.cxx -L$(DIMDIR)/$(ODIR) -ldim -o $(ODIR)/testServer $(LIBS)
+	
+$(ODIR)/testClient:	$(SDIR)/test_client.cxx $(DIMDIR)/$(ODIR)/libdim.a
+	$(CXX) $(EXCFLAGS) $(LDFLAGS) $(SDIR)/test_client.cxx -L$(DIMDIR)/$(ODIR) -ldim -o $(ODIR)/testClient $(LIBS)
+
+$(ODIR)/demo_server:	$(SDIR)/demo_server.c $(DIMDIR)/$(ODIR)/libdim.a
+	$(CC) $(EXCFLAGS) $(LDFLAGS) $(SDIR)/demo_server.c -L$(DIMDIR)/$(ODIR) -ldim -o $(ODIR)/demo_server $(LIBS)
+	
+$(ODIR)/demo_client:	$(SDIR)/demo_client.c $(DIMDIR)/$(ODIR)/libdim.a
+	$(CC) $(EXCFLAGS) $(LDFLAGS) $(SDIR)/demo_client.c -L$(DIMDIR)/$(ODIR) -ldim -o $(ODIR)/demo_client $(LIBS)
+	
+
+
+
+
+
+
+
+
+

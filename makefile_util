@@ -1,0 +1,38 @@
+#
+# utilities makefile
+#
+
+include makefile_common
+
+SDIR = ./src/util
+
+LIBS = $(EXTRALIBS)
+
+ifeq ($(CPP),yes)
+all:	$(ODIR)/dim_send_command $(ODIR)/dim_get_service $(ODIR)/DimBridge $(ODIR)/checkDns $(ODIR)/checkDimServers
+else
+all:	$(ODIR)/dim_send_command $(ODIR)/dim_get_service
+endif
+
+$(ODIR)/dim_get_service: $(SDIR)/dim_get_service.c $(DIMDIR)/$(ODIR)/libdim.a
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SDIR)/dim_get_service.c -L$(DIMDIR)/$(ODIR) -ldim -o $(ODIR)/dim_get_service $(LIBS)
+
+$(ODIR)/dim_send_command: $(SDIR)/dim_send_command.c $(DIMDIR)/$(ODIR)/libdim.a
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SDIR)/dim_send_command.c -L$(DIMDIR)/$(ODIR) -ldim -o $(ODIR)/dim_send_command $(LIBS)
+
+$(ODIR)/DimBridge:	$(SDIR)/dimbridge.cxx $(DIMDIR)/$(ODIR)/libdim.a
+	$(CXX) $(CFLAGS) $(LDFLAGS) $(SDIR)/dimbridge.cxx -L$(DIMDIR)/$(ODIR) -ldim -o $(ODIR)/DimBridge $(LIBS)
+
+$(ODIR)/checkDns:	$(SDIR)/check_dns.cxx $(DIMDIR)/$(ODIR)/libdim.a
+	$(CXX) $(CFLAGS) $(LDFLAGS) $(SDIR)/check_dns.cxx -L$(DIMDIR)/$(ODIR) -ldim -o $(ODIR)/checkDns $(LIBS)
+
+$(ODIR)/checkDimServers:	$(SDIR)/check_dim_servers.cxx $(DIMDIR)/$(ODIR)/libdim.a
+	$(CXX) $(CFLAGS) $(LDFLAGS) $(SDIR)/check_dim_servers.cxx -L$(DIMDIR)/$(ODIR) -ldim -o $(ODIR)/checkDimServers $(LIBS)
+
+
+
+
+
+
+
+

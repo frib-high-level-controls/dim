@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pvss_dim_client", "pvss_dim_client.vcxproj", "{13CBC5A1-2751-4996-8C1C-29D719E0C375}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pvss_dim_server", "pvss_dim_server.vcxproj", "{F4E2048D-7BEA-4769-85DC-7D52519DF0F4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{13CBC5A1-2751-4996-8C1C-29D719E0C375}.Debug|Win32.ActiveCfg = Debug|Win32
+		{13CBC5A1-2751-4996-8C1C-29D719E0C375}.Debug|Win32.Build.0 = Debug|Win32
+		{13CBC5A1-2751-4996-8C1C-29D719E0C375}.Debug|x64.ActiveCfg = Debug|x64
+		{13CBC5A1-2751-4996-8C1C-29D719E0C375}.Debug|x64.Build.0 = Debug|x64
+		{13CBC5A1-2751-4996-8C1C-29D719E0C375}.Release|Win32.ActiveCfg = Release|Win32
+		{13CBC5A1-2751-4996-8C1C-29D719E0C375}.Release|Win32.Build.0 = Release|Win32
+		{13CBC5A1-2751-4996-8C1C-29D719E0C375}.Release|x64.ActiveCfg = Release|x64
+		{13CBC5A1-2751-4996-8C1C-29D719E0C375}.Release|x64.Build.0 = Release|x64
+		{F4E2048D-7BEA-4769-85DC-7D52519DF0F4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F4E2048D-7BEA-4769-85DC-7D52519DF0F4}.Debug|Win32.Build.0 = Debug|Win32
+		{F4E2048D-7BEA-4769-85DC-7D52519DF0F4}.Debug|x64.ActiveCfg = Debug|x64
+		{F4E2048D-7BEA-4769-85DC-7D52519DF0F4}.Debug|x64.Build.0 = Debug|x64
+		{F4E2048D-7BEA-4769-85DC-7D52519DF0F4}.Release|Win32.ActiveCfg = Release|Win32
+		{F4E2048D-7BEA-4769-85DC-7D52519DF0F4}.Release|Win32.Build.0 = Release|Win32
+		{F4E2048D-7BEA-4769-85DC-7D52519DF0F4}.Release|x64.ActiveCfg = Release|x64
+		{F4E2048D-7BEA-4769-85DC-7D52519DF0F4}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

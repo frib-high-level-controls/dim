@@ -1,0 +1,20 @@
+#
+# test makefile
+#
+
+include makefile_common
+
+SDIR = ./src/webDid
+TDIR = ./WebDID
+
+LIBS = $(EXTRALIBS)
+
+all:	$(ODIR)/webDid
+
+$(ODIR)/webDid:	$(SDIR)/webServer.c $(SDIR)/webTcpip.c $(SDIR)/webDid.c $(DIMDIR)/$(ODIR)/libdim.a
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SDIR)/webServer.c $(SDIR)/webTcpip.c $(SDIR)/webDid.c -L$(DIMDIR)/$(ODIR) -ldim -o $(ODIR)/webDid $(LIBS)
+	cp $(ODIR)/webDid $(TDIR)/webDid
+
+
+
+
